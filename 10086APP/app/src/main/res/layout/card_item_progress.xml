@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minWidth="150dp"
+    android:minHeight="170dp"
+    android:maxWidth="150dp"
+    android:maxHeight="170dp"
+    android:background="@color/white"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.app.progresviews.ProgressWheel
+        android:id="@+id/wheelprogress"
+        android:layout_width="127dp"
+        android:layout_height="97dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="11dp"
+        app:barWidth="4dp"
+        app:countText="931,199"
+        app:countTextColor="@android:color/black"
+        app:countTextSize="16sp"
+        app:defTextColor="@android:color/black"
+        app:defTextSize="10sp"
+        app:definitionText="Steps"
+        app:marginBtwText="15dp"
+        app:percentage="360"
+        android:transitionName="share"
+        app:progressColor="@color/bluelight" />
+
+    <TextView
+        android:id="@+id/card_progress_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:text="语音"
+        android:textColor="@color/blcak"
+        android:textSize="12dp" />
+
+    <Button
+        android:id="@+id/card_progress_button"
+        android:layout_width="wrap_content"
+        android:layout_height="27dp"
+        android:layout_below="@+id/wheelprogress"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/border_line_while"
+        android:layout_marginTop="8dp"
+        android:focusable="false"
+        android:text="去兑换" />
+
+</RelativeLayout>
