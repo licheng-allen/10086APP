@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.os.Vibrator;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -24,7 +23,7 @@ import chinamobile.com.a10086app.Adapter.DragAdapter;
 import chinamobile.com.a10086app.R;
 import chinamobile.com.a10086app.Utils.DataTools;
 
-public class DragGrid extends RecyclerView {
+public class DragGrid extends GridView {
 	/** 点击时候的X位置 */
 	public int downX;
 	/** 点击时候的Y位置 */
@@ -198,9 +197,22 @@ public class DragGrid extends RecyclerView {
 					return false;
 				}
 				ViewGroup dragViewGroup = (ViewGroup) getChildAt(dragPosition - getFirstVisiblePosition());
-				TextView dragTextView = (TextView)dragViewGroup.findViewById(R.id.card_text_title);
-				dragTextView.setSelected(true);
-				dragTextView.setEnabled(false);
+				TextView dragTextView;
+				int viewType=(int)(dragViewGroup.getTag());
+				if(viewType==0){
+					dragTextView = (TextView)dragViewGroup.findViewById(R.id.card_progress_title);
+					dragTextView.setSelected(true);
+					dragTextView.setEnabled(false);
+				}else if(viewType==1){
+					dragTextView = (TextView)dragViewGroup.findViewById(R.id.card_text_title);
+					dragTextView.setSelected(true);
+					dragTextView.setEnabled(false);
+				}else{
+					ImageView dragImageView = (ImageView)dragViewGroup.findViewById(R.id.card_image_logo);
+					dragImageView.setSelected(true);
+					dragImageView.setEnabled(false);
+				}
+
 				itemHeight = dragViewGroup.getHeight();
 				itemWidth = dragViewGroup.getWidth();
 				itemTotalCount = DragGrid.this.getCount();

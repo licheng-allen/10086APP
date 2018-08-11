@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import chinamobile.com.a10086app.Bean.News;
 import chinamobile.com.a10086app.R;
+import chinamobile.com.a10086app.ViewHoler.OnePicViewHolder;
+import chinamobile.com.a10086app.ViewHoler.ThreePicViewHolder;
 
 public class NewsAdapter extends Adapter {
     private LayoutInflater mLayoutInflater;
@@ -40,21 +42,10 @@ public class NewsAdapter extends Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof OnePicViewHolder) {
             OnePicViewHolder onePicViewHolder=(OnePicViewHolder) holder;
-            onePicViewHolder.textViewTitle.setText(news[position].getTitle());
-            onePicViewHolder.circleimageView.setImageBitmap(news[position].getImageById(0));
-            onePicViewHolder.textViewAuthor.setText(news[position].getAutor());
-            onePicViewHolder.textViewPageViews.setText(news[position].getPageViewNumber());
-            onePicViewHolder.textViewtime.setText(news[position].getTime());
+            onePicViewHolder.OnBindData(news[position]);
         } else if (holder instanceof ThreePicViewHolder) {
             ThreePicViewHolder threePicViewHolder=(ThreePicViewHolder) holder;
-            threePicViewHolder.textViewTitle.setText(news[position].getTitle());
-            threePicViewHolder.textViewTitle.setText(news[position].getTitle());
-            threePicViewHolder.textViewAuthor.setText(news[position].getAutor());
-            threePicViewHolder.textViewPageViews.setText(news[position].getPageViewNumber());
-            threePicViewHolder.textViewtime.setText(news[position].getTime());
-            threePicViewHolder.circleimageView1.setImageBitmap(news[position].getImageById(0));
-            threePicViewHolder.circleimageView2.setImageBitmap(news[position].getImageById(1));
-            threePicViewHolder.circleimageView3.setImageBitmap(news[position].getImageById(2));
+            threePicViewHolder.OnBindData(news[position]);
         }
     }
 
@@ -69,42 +60,5 @@ public class NewsAdapter extends Adapter {
         return news == null ? 0 : news.length;
     }
 
-    //单图片item 的ViewHolder
-    public static class OnePicViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewTitle;
-        ImageView circleimageView;
-        TextView textViewAuthor;
-        TextView textViewPageViews;
-        TextView textViewtime;
-        public OnePicViewHolder(View itemView) {
-            super(itemView);
-            textViewTitle = (TextView) itemView.findViewById(R.id.item_onepic_title);
-            circleimageView=(ImageView)itemView.findViewById(R.id.item_onepic_image);
-            textViewAuthor= (TextView) itemView.findViewById(R.id.item_onepic_autor);
-            textViewPageViews= (TextView) itemView.findViewById(R.id.item_onepic_totleviews);
-            textViewtime=(TextView) itemView.findViewById(R.id.item_onepic_time);
-        }
-    }
-
-    //多图片item 的ViewHolder
-    public static class ThreePicViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewTitle;
-        TextView textViewAuthor;
-        TextView textViewPageViews;
-        TextView textViewtime;
-        ImageView circleimageView1;
-        ImageView circleimageView2;
-        ImageView circleimageView3;
-        public ThreePicViewHolder(View itemView) {
-            super(itemView);
-            textViewTitle = (TextView) itemView.findViewById(R.id.item_threepic_title);
-            textViewAuthor= (TextView) itemView.findViewById(R.id.item_threepic_autor);
-            textViewPageViews= (TextView) itemView.findViewById(R.id.item_threepic_totleviews);
-            textViewtime=(TextView) itemView.findViewById(R.id.item_threepic_time);
-            circleimageView1=(ImageView)itemView.findViewById(R.id.item_threepic_image1);
-            circleimageView2=(ImageView)itemView.findViewById(R.id.item_threepic_image2);
-            circleimageView3=(ImageView)itemView.findViewById(R.id.item_threepic_image3);
-        }
-    }
 }
 

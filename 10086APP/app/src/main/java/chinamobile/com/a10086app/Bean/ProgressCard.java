@@ -1,10 +1,13 @@
 package chinamobile.com.a10086app.Bean;
 
 
+import android.content.Context;
+
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class ProgressCard extends Card {
-
+public class ProgressCard extends Card implements Serializable {
+    private static final long serialVersionUID = -7060210544600464481L;
     private float total;//进度条极大值
     private float surplus;//进度条剩余值
     private String title;//标题

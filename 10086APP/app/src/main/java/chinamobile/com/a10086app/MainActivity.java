@@ -12,7 +12,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.MotionEvent;
+import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -28,8 +28,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import chinamobile.com.a10086app.Adapter.BusinessAdapter;
 import chinamobile.com.a10086app.Adapter.CardAdapter;
 import chinamobile.com.a10086app.Adapter.NewsAdapter;
+import chinamobile.com.a10086app.Bean.Business;
 import chinamobile.com.a10086app.Bean.Card;
 import chinamobile.com.a10086app.Bean.ImageCard;
 import chinamobile.com.a10086app.Bean.News;
@@ -39,18 +41,20 @@ import chinamobile.com.a10086app.Interface.OnItemLongClickListener;
 import chinamobile.com.a10086app.loader.GlideLoader;
 
 public class MainActivity extends AppCompatActivity implements OnBannerListener {
-    //广告橱窗试图
+    /**广告橱窗视图*/
     private Banner adBanner;
     private ArrayList<String> bannerPaths;
     private ArrayList<String> bannerTitles;
-    //中部业务网格试图
+    /**中部业务网格视图*/
     private GridView gridViewBusiness;
-    private List<Map<String, Object>> businessDataList;
-    private SimpleAdapter businessAdapter;
+    private ArrayList<Business> businessDataList;
+    private BusinessAdapter businessAdapter;
+    /**下部新闻视图*/
     private RecyclerView recycleViewNews;
     private RecyclerView recyclerViewCard;
     private News[] news;
-    private Card[] cards;
+    public static ArrayList<Card> cards;
+    private static String[] TAGS={"progress","text","image"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,25 +85,38 @@ public class MainActivity extends AppCompatActivity implements OnBannerListener 
             @Override
             public void onItemLongClick(View view, int data) {
                 Intent intent=new Intent(MainActivity.this, CardActivity.class);
-                ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, findViewById(R.id.wheelprogress), "share");
+                ActivityOptions transitionActivityOptions;
+                setTansitionActivityOptions();
+                Log.d("DEBUG",data+"");
+                ArrayList<Pair> pairs=new ArrayList<Pair>();
+                pairs.add( Pair.create(findViewById(R.id.card_item_progress_layout),"progress"));
+                //为点击的元素设置元素共享动画
+                transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,
+                        Pair.create(view,TAGS[cards.get(data).getCardType()]));
+                CardActivity.defaultUsercards =cards;
+                 intent.putExtra("cards", cards);
                 startActivity(intent, transitionActivityOptions.toBundle());
             }
         });
         recyclerViewCard.setAdapter(cardAdapter);
         recyclerViewCard.setNestedScrollingEnabled(false);
-
     }
 
     private void initCardData() {
-        Resources r = this.getResources();
-        Bitmap testbmp= BitmapFactory.decodeResource(r, R.drawable.menu_find_blue);
-        cards=new Card[4];
-        cards[0]=new ProgressCard(100,80,"语音","剩余流量/GB");
-        cards[1]=new ProgressCard(100,40,"语音","剩余流量/GB");
-        cards[2]=new TextCard(testbmp,70,"当前积分/分","去兑换");
-        cards[3]=new ImageCard(testbmp,"添加亲密");
+        if(cards!=null)
+            return;
+        int testbmp=  R.drawable.menu_find_blue;
+        cards=new ArrayList<Card>();
+        cards.add(new ProgressCard(100,80,"语音","剩余流量/GB"));
+        cards.add(new ImageCard(testbmp,"添加亲密"));
+        cards.add(new TextCard(testbmp,70,"当前积分/分","去兑换"));
+        cards.add(new ProgressCard(100,40,"语音","剩余流量/GB"));
+        cards.add(new TextCard(testbmp,70,"当前积分/分","去兑换"));
+        cards.add(new TextCard(testbmp,70,"当前积分/分","去兑换"));
     }
+   public void setTansitionActivityOptions(){
 
+    }
     private void initRecycleViewNews() {
         initRecycleViewData();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
@@ -126,19 +143,21 @@ public class MainActivity extends AppCompatActivity implements OnBannerListener 
     }
     private void initRecycleViewData() {
         Resources r = this.getResources();
-        Bitmap testbmp= BitmapFactory.decodeResource(r, R.drawable.testpic);
-
+        Bitmap testbmp= BitmapFactory.decodeResource(r, R.drawable.testimage1);
+        Bitmap testbmp1= BitmapFactory.decodeResource(r, R.drawable.testimage);
+        Bitmap testbmp2= BitmapFactory.decodeResource(r, R.drawable.testpic);
         ArrayList<Bitmap> bitmaps1=new ArrayList<Bitmap>();
         bitmaps1.add(testbmp);
 
         ArrayList<Bitmap> bitmaps2=new ArrayList<Bitmap>();
         bitmaps2.add(testbmp);
-        bitmaps2.add(testbmp);
-        bitmaps2.add(testbmp);
+        bitmaps2.add(testbmp1);
+        bitmaps2.add(testbmp2);
+
         news=new News[3];
-        news[0]=new News("测试样式1","今日头条","昨天16:09",165000,bitmaps1);
-        news[1]=new News("测试样式2","今日头条","昨天16:09",165000,bitmaps2);
-        news[2]=new News("测试样式1","今日头条","昨天16:09",165000,bitmaps1);
+        news[0]=new News("就在刚刚，中国移动在香港发布2018年度中期业绩！","今日头条","昨天16:09",1602550,bitmaps1);
+        news[1]=new News("夏季是“养骨”的好时机！养好了身强体健，远离百病","中国移动","昨天16:09",4357635,bitmaps2);
+        news[2]=new News("第一次有人把5G讲的这么简单明了！","今日头条","昨天16:09",5004305,bitmaps1);
 
     }
 
@@ -147,32 +166,32 @@ public class MainActivity extends AppCompatActivity implements OnBannerListener 
 
         //初始化数据
         initGrideViewData();
-        String[] from={"img","text"};
-        int[] to={R.id.img,R.id.text};
-        businessAdapter=new SimpleAdapter(this, businessDataList, R.layout.grideview_item_linearlayout, from, to);
+        businessAdapter=new BusinessAdapter(this, businessDataList);
         gridViewBusiness.setAdapter(businessAdapter);
         gridViewBusiness.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
                                     long arg3) {
                 AlertDialog.Builder builder= new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("提示").setMessage(businessDataList.get(arg2).get("text").toString()).create().show();
             }
         });
     }
     void initGrideViewData() {
         //图标
-        int icno[] = { R.drawable.bill, R.drawable.bill, R.drawable.bill,
-                R.drawable.bill, R.drawable.bill, R.drawable.bill, R.drawable.bill,
-                R.drawable.bill };
+        int icno[] = { R.drawable.bill, R.drawable.surplus, R.drawable.click,
+                R.drawable.recharge, R.drawable.add, R.drawable.red, R.drawable.reward,
+                R.drawable.more };
         //图标下的文字
-        String name[]={"时钟","信号","宝箱","秒钟","大象","FF","记事本","书签"};
-        businessDataList = new ArrayList<Map<String, Object>>();
+        String name[]={"话费账单","套餐余量","一键检测","话费充值","流量办理","3元1G包","每日领奖","更多"};
+        businessDataList = new ArrayList<Business>();
         for (int i = 0; i <icno.length; i++) {
-            Map<String, Object> map=new HashMap<String, Object>();
-            map.put("img", icno[i]);
-            map.put("text",name[i]);
-            businessDataList.add(map);
+            Business business=null;
+            if(i==5||i==7){
+                business=new Business(icno[i],name[i],View.VISIBLE);
+            }else{
+                business=new Business(icno[i],name[i],View.INVISIBLE);
+            }
+            businessDataList.add(business);
         }
     }
     private void initBanner() {
@@ -225,8 +244,9 @@ public class MainActivity extends AppCompatActivity implements OnBannerListener 
     public void OnBannerClick(int position) {
         Log.i("tag", "你点了第"+position+"张轮播图");
         Intent intent=new Intent(MainActivity.this, CardActivity.class);
-        ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, findViewById(R.id.wheelprogress), "share");
-        startActivity(intent, transitionActivityOptions.toBundle());
+        //ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, findViewById(R.id.card_item_progress_layout), "share");
+       // startActivity(intent, transitionActivityOptions.toBundle());
+        startActivity(intent);
 
     }
 }

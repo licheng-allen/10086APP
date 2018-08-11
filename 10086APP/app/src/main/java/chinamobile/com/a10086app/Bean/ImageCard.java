@@ -2,11 +2,14 @@ package chinamobile.com.a10086app.Bean;
 
 import android.graphics.Bitmap;
 
-public class ImageCard extends Card{
-    private Bitmap logo;
-    private String buttonText;
+import java.io.Serializable;
 
-    public ImageCard(Bitmap logo, String buttonText) {
+public class ImageCard extends Card implements Serializable {
+    private int logo;
+    private String buttonText;
+    private static final long serialVersionUID = 1L;
+
+    public ImageCard(int logo, String buttonText) {
         this.logo = logo;
         this.buttonText = buttonText;
         cardType=2;
@@ -20,11 +23,11 @@ public class ImageCard extends Card{
         this.buttonText = buttonText;
     }
 
-    public Bitmap getLogo() {
+    public int getLogo() {
         return logo;
     }
 
-    public void setLogo(Bitmap logo) {
+    public void setLogo(int logo) {
         this.logo = logo;
     }
 }

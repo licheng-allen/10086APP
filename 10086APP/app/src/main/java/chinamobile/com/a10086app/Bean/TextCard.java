@@ -6,11 +6,12 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 public class TextCard extends Card implements Serializable {
-    private Bitmap logo;
+    private static final long serialVersionUID = -7060210544600464481L;
+    private int logo;
     private float number;
     private String unit;//进度条剩余值
     private String buttonText;
-    public TextCard(Bitmap logo, float number, String unit, String buttonText) {
+    public TextCard(int logo, float number, String unit, String buttonText) {
         this.logo = logo;
         this.number = number;
         this.unit = unit;
@@ -39,11 +40,11 @@ public class TextCard extends Card implements Serializable {
         this.unit = unit;
     }
 
-    public Bitmap getLogo() {
+    public int getLogo() {
         return logo;
     }
 
-    public void setLogo(Bitmap logo) {
+    public void setLogo(int logo) {
         this.logo = logo;
     }
 
